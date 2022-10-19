@@ -12,5 +12,14 @@ class ProductPage(BasePage):
             ProductPageLocators.BASKET_LINK))
 
     def add_to_basket(self):
-        basket_link = self.browser.find_element(*ProductPageLocators.BASKET_LINK)
-        basket_link.click()
+        self.browser.find_element(*ProductPageLocators.BASKET_LINK).click()
+
+    def get_product_title_in_basket(self):
+        return self.browser.find_element(*ProductPageLocators.NAME_PRODUCT_LINK).text
+
+    def get_product_name_in_message(self):
+        return self.browser.find_element(*ProductPageLocators.STATUS_NAME_PRODUCT_LINK).text
+
+    def compare_product_names(self):
+        assert self.get_product_title_in_basket() == self.get_product_name_in_message(), \
+            "Incorrect product name in the shopping cart message"
