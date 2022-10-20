@@ -23,3 +23,11 @@ class ProductPage(BasePage):
     def compare_product_names(self):
         assert self.get_product_title_in_basket() == self.get_product_name_in_message(), \
             "Incorrect product name in the shopping cart message"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
+
+    def success_message_should_disappear(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
