@@ -9,7 +9,7 @@ class ProductPage(BasePage):
 
     def check_click_basket(self):
         assert WebDriverWait(self.browser, self.WAIT_TIME).until(EC.element_to_be_clickable(
-            ProductPageLocators.BASKET_LINK))
+            ProductPageLocators.BASKET_LINK)), f"add_to_basket is inactive for {self.WAIT_TIME} seconds"
 
     def add_to_basket(self):
         self.browser.find_element(*ProductPageLocators.BASKET_LINK).click()

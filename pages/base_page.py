@@ -5,8 +5,6 @@ from .locators import BasePageLocators
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
-
-
 # from selenium.common.exceptions import NoAlertPresentException TODO: import for get code from alert
 
 
@@ -40,7 +38,7 @@ class BasePage:
             return False
         return True
 
-    def is_not_element_present(self, how, what, timeout=4):
+    def is_not_element_present(self, how, what, timeout=7):
         """It will fall as soon as it sees the desired element. Failed to appear: success/true"""
         try:
             WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
@@ -58,6 +56,10 @@ class BasePage:
 
     def should_be_login_link(self):
         assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
+                                                                     " probably unauthorised user"
 
     def solve_quiz_and_get_code(self):  # TODO only for stepic lessons
         alert = self.browser.switch_to.alert
