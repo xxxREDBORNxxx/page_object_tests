@@ -38,9 +38,12 @@ class TestUserAddToBasketFromProductPage:
 
 
 @pytest.mark.need_review
-@pytest.mark.parametrize('param',
-                         [*range(1, 7), pytest.param(7, marks=pytest.mark.xfail(reason='bugged')), *range(8, 10)])
-def test_guest_can_add_product_to_basket(browser, param):
+# @pytest.mark.parametrize('param',
+#                          [*range(1, 7), pytest.param(7, marks=pytest.mark.xfail(reason='bugged')), *range(8, 10)])
+def test_guest_can_add_product_to_basket(browser, param=1):
+    """A test for finding bugs during promotions on the shopping cart page.
+     Parameterization for the test review is commented out. Set by default param=1"""
+
     link = f"http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_" \
            f"207/?promo=offer{param}"
     page = ProductPage(browser, link)
