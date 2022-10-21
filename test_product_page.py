@@ -1,6 +1,8 @@
+import time
+
 import pytest
 
-from .pages.login_page import LoginPage
+from .pages.basket_page import BasketPage
 from .pages.product_page import ProductPage
 
 
@@ -62,3 +64,17 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     page.check_click_basket()
     page.add_to_basket()
     page.success_message_should_disappear()
+
+
+@pytest.mark.basket
+def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/ru/catalogue/the-shellcoders-handbook_209/"
+    page = ProductPage(browser, link)  # инициализируем Page Object
+    page.open()  # открываем страницу
+    page.should_be_basket_link()
+    page.go_to_basket_page()
+    time.sleep(10)
+    basket_page = BasketPage(browser, browser.current_url)
+    basket_page.should_be_basket_url()  # TODO: only for the default language=ru
+    basket_page.should_not_be_product()
+    basket_page.should_be_message_empty()

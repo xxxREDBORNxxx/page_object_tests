@@ -5,7 +5,9 @@ from .locators import BasePageLocators
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoAlertPresentException
+
+
+# from selenium.common.exceptions import NoAlertPresentException TODO: import for get code from alert
 
 
 class BasePage:
@@ -17,8 +19,12 @@ class BasePage:
     def open(self):
         self.browser.get(self.url)
 
+    def go_to_basket_page(self):
+        link = self.browser.find_element(*BasePageLocators.LOOK_BASKET_LINK)
+        link.click()
+
     def is_disappeared(self, how, what, timeout=4):
-        """Ждем пока не исчезнет. Исчез: успех/true"""
+        """Waiting until it disappears. Disappeared: Success/true"""
         try:
             WebDriverWait(self.browser, timeout, 1, TimeoutException). \
                 until_not(EC.presence_of_element_located((how, what)))
@@ -35,7 +41,7 @@ class BasePage:
         return True
 
     def is_not_element_present(self, how, what, timeout=4):
-        """Упадет, как только увидит искомый элемент. Не появился: успех/true"""
+        """It will fall as soon as it sees the desired element. Failed to appear: success/true"""
         try:
             WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
         except TimeoutException:
@@ -47,17 +53,25 @@ class BasePage:
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         link.click()
 
+    def should_be_basket_link(self):
+        assert self.is_element_present(*BasePageLocators.LOOK_BASKET_LINK), "Login link is not presented"
+
     def should_be_login_link(self):
         assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
 
-    def solve_quiz_and_get_code(self):
+    def solve_quiz_and_get_code(self):  # TODO only for stepic lessons
         alert = self.browser.switch_to.alert
+
         x = alert.text.split(" ")[2]
         answer = str(math.log(abs((12 * math.sin(float(x))))))
+
         time.sleep(2)
+
         alert.send_keys(answer)
         alert.accept()
-        time.sleep(20)
+
+        # TODO: get code from alert
+        # time.sleep(5)
         # try:
         #     alert = self.browser.switch_to.alert
         #     alert_text = alert.text
